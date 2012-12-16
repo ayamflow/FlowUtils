@@ -26,10 +26,11 @@ window.fw = (function()
 		},
 
 		// Returns an array of rgb colors from start to
-		// end width "steps" midpoints
+		// end width "steps" midpoints, maximum 255 steps
 		createColorRange: function(start, end, steps)
 		{
 			var colors, rgb, hex, amount, last, first;
+			steps = Math.min(steps, 256);
 			steps--;
 			hex = /^#[0-9a-fA-F]{6}$/;
 			rgb = /(^rgb\((\d+),\s*(\d+),\s*(\d+)\))$/;
@@ -57,15 +58,15 @@ window.fw = (function()
 			// processing colors
 			for(var i = 0; i < 3; i++)
 			{
-				amount[i] = Math.floor((end[i] - start[i]) / steps);
+				amount[i] = ~~((end[i] - start[i]) / steps);
 			}
 
 			var midpoint, red, green, blue;
 			for(var j = 1; j < steps; j++)
 			{
-				red = parseInt(start[0],10) + parseInt(amount[0],10)*j;
-				green = parseInt(start[1],10) + parseInt(amount[1],10)*j;
-				blue = parseInt(start[2],10) + parseInt(amount[2],10)*j;
+				red = ~~(start[0]) + ~~(amount[0])*j;
+				green = ~~(start[1]) + ~~(amount[1])*j;
+				blue = ~~(start[2]) + ~~(amount[2])*j;
 				midpoint = 'rgb(' + red + ',' + green + ',' + blue + ')';
 				colors.push(midpoint);
 			}
